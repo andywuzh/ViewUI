@@ -9,6 +9,9 @@
     export default {
         name: 'iForm',
         props: {
+            value: {
+                type: Object
+            },
             model: {
                 type: Object
             },
@@ -115,11 +118,20 @@
             }
         },
         watch: {
+            value(v) {
+                this.model = v
+            },
             rules() {
                 this.validate();
             }
         },
         created () {
+            if (Object.getOwnPropertyNames(this.model).length > 0) {
+                this.value = this.model;
+            } else if (this.value) {
+                this.model = this.value;
+            }
+
             this.$on('on-form-item-add', (field) => {
                 if (field) this.fields.push(field);
                 return false;
